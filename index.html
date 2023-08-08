@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Acceleration Example</title>
+    <script type="text/javascript" charset="utf-8">
+        var watchID = null;
+        var x =new x[5];
+	    var y =new y[5];
+	    var z =new z[5];
+        var i=-1;
+        function onLoad(){
+            document.addEventListener("deviceready", onDeviceReady, false);
+            }
+        
+        function onDeviceReady() {
+            startWatch();
+            }
+            function startWatch() {
+            var options = { frequency: 1000 };
+            watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
+        function stopWatch() {
+            if (watchID) {
+            navigator.accelerometer.clearWatch(watchID);
+            watchID = null;
+            }
+            }
+        
+        function onSuccess(acceleration,x,y,z,i) 
+        {
+            var element = document.getElementById('accelerometer');
+            i++; 
+             if(i==5)
+	    	{
+	    		document.getElementById("shubx").value=x.toString();
+	    		document.getElementById("shuby").value=y.toString();
+	    		document.getElementById("shubz").value=z.toString();
+	   	 	}
+	   	 	i=i%5;
+            x[i] =  acceleration.x;
+            y[i] =  acceleration.y;
+            z[i] =  acceleration.z;
+             element.innerHTML = 'Acceleration X: ' + acceleration.x + '<br />' +
+            'Acceleration Y: ' + acceleration.y + '<br />' +
+            'Acceleration Z: ' + acceleration.z + '<br />' +
+
+
+
+            'Timestamp: ' + acceleration.timestamp + '<br />';
+        }
+            
+        function onError() {
+            alert('onError!');
+            }
+        
+         cordova.plugins.magnetometer.getReading(
+    
+             function success(reading){
+                    console.log(JSON.stringify(reading)); 
+                    
+                    }
+    
+             function error(message){
+                    console.log(message);
+                    }
+  )
+        
+        </script>
+</head>
+        <body onload="onLoad()">
+          <iframe id="some_name" name="some_name" style="display:none ; position:absulote; z-index:-100"></iframe>       
+        <div id="accelerometer">Waiting for accelerometer...</div>
+        <button onclick="startWatch();">Start Watching</button>
+        <button onclick="stopWatch();">Stop Watching</button>
+        <form id="form " name="form" action="http://192.168.122.191/db.php"  method="post" target="some_name">
+        <input type="text" name="namex" id="shubx">
+         <input type="text" name="namey" id="shuby">
+          <input type="text" name="namez" id="shubz">
+        <input type="submit" value="run" id="run">
+        </form>
+    <script type="text/javascript" src="cordova.js"></script>
+</body>
+</html>
